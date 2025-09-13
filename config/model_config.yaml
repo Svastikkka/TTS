@@ -1,0 +1,45 @@
+# -----------------------------------------------------------------------------
+# Model Configuration for TTS Pipeline
+# -----------------------------------------------------------------------------
+
+global:
+  precision: "fp16"        # Options: fp32, fp16, int8 (requires calibration)
+  batch_size: 1            # For real-time inference
+  device: "cuda"           # "cuda" or "cpu" (debug only)
+
+languages:
+  en:
+    acoustic_model:
+      engine_path: "models/fastspeech2_en.engine"
+      input_shape: [1, 200]      # [batch, phoneme_length]
+      output_shape: [1, 80, 200] # [batch, mel_channels, mel_length]
+    vocoder:
+      engine_path: "models/hifigan_en.engine"
+      sample_rate: 22050
+
+  fr:
+    acoustic_model:
+      engine_path: "models/fastspeech2_fr.engine"
+      input_shape: [1, 200]
+      output_shape: [1, 80, 200]
+    vocoder:
+      engine_path: "models/hifigan_fr.engine"
+      sample_rate: 22050
+
+  hi:
+    acoustic_model:
+      engine_path: "models/fastspeech2_hi.engine"
+      input_shape: [1, 200]
+      output_shape: [1, 80, 200]
+    vocoder:
+      engine_path: "models/hifigan_hi.engine"
+      sample_rate: 24000
+
+# -----------------------------------------------------------------------------
+# Optional Voice/Style Configurations (Future Expansion)
+# -----------------------------------------------------------------------------
+voices:
+  en_male: { language: "en", speaker_id: 0 }
+  en_female: { language: "en", speaker_id: 1 }
+  fr_male: { language: "fr", speaker_id: 0 }
+  hi_female: { language: "hi", speaker_id: 0 }
