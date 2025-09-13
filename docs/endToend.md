@@ -1,7 +1,51 @@
-1. **Text processing**
-2. **Phoneme generation**
-3. **Model inference (optimized with TensorRT)**
-4. **Audio output**
+## 🔄 **End-to-End Flow**
+
+1. **LLM Output**
+
+   * Your LLM generates text like:
+
+     > "Meeting is scheduled for 14/09/2025 at 3 PM in Paris."
+
+2. **Language Detection (spaCy / fastText)**
+
+   * Detects language → `"en"` (English)
+   * You can switch to the right voice model (English, French, Hindi, etc.)
+
+3. **Text Normalization (Rules)**
+
+   * Converts numbers, dates, abbreviations:
+
+     > "Meeting is scheduled for **September fourteenth, two thousand twenty-five** at **three P M** in Paris."
+
+   (This makes speech sound natural — especially important for dates, times, currency.)
+
+4. **TTS Engine**
+
+   * Pass the cleaned text + language/voice choice to your TTS engine (Coqui, ElevenLabs, OpenAI TTS, VITS, etc.)
+   * Get the audio output (MP3/WAV).
+
+5. **Playback**
+
+   * Return or stream the audio to the client.
+
+---
+
+## ✅ What This Setup Guarantees
+
+* **Consistent speech quality** → because text is normalized before synthesis.
+* **Correct pronunciation across languages** → because you choose the right TTS model/voice per language.
+* **Lightweight & Fast** → spaCy + regex/rule-based normalization are very fast, perfect for real-time.
+
+---
+
+## ⚠️ Common Pitfalls to Avoid
+
+* **Skipping normalization** → TTS might say "two zero two five" instead of "two thousand twenty-five."
+* **Not detecting language properly** → Could pick wrong voice/accent and sound unnatural.
+* **Feeding raw LLM text with formatting (Markdown, JSON)** → Clean that up before sending to TTS.
+
+
+
 
 ---
 
