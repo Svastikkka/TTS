@@ -48,3 +48,26 @@ tts-engine/
     └── test_latency.py
 
 ```
+
+### How Each Module Fits Together
+
+- `core/language_detector.py` → detects input language, picks correct normalization rules & model.
+- `core/normalizer.py` → expands numbers, dates, etc. into speech-friendly text.
+- `core/phonemizer.py` → converts text to phoneme sequence.
+- `core/acoustic_model.py` → loads TensorRT-optimized FastSpeech2 model, outputs mel-spectrogram.
+- `core/vocoder.py` → converts spectrogram to waveform using TensorRT-optimized HiFi-GAN.
+- `core/pipeline.py` → orchestrates all steps (language detection → normalization → inference → audio).
+- `api/server.py` → exposes HTTP/gRPC/WebSocket interface for receiving payloads and streaming back audio.
+- `benchmarks/` → lets you measure latency and optimize for <200 ms.
+
+### Development Flow
+
+1. Train / Fine-tune Model
+   - Use notebooks/training.ipynb to train FastSpeech2 + HiFi-GAN for your voices.
+2. Export & Optimize
+    - convert to ONNX → TensorRT using notebooks/export_to_onnx.ipynb & optimize_trt.ipynb.
+3. Integrate into Pipeline
+    - Update config/model_config.yaml with optimized engine paths.
+4. Run & Test
+    Start API server: `python src/main.py`
+5. Benchmark latency with `benchmarks/benchmark.py`.
