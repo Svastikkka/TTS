@@ -3,5 +3,5 @@ Text to speech model
 
 ### Diagram
 ```
-LLM → [Language Detection (spaCy)] → [Text Normalization (rules)] → [TTS Engine]
+LLM → [Language Detection] → [Text Normalization] → [Phoneme Generation] → [Acoustic Model] → [Vocoder] → Audio
 ```
