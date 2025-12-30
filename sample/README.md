@@ -53,3 +53,17 @@ For 10
 ```
 pip install "huggingface-hub>=0.34.0" "transformers>=4.30.0" --upgrade
 pip install torch torchaudio fastapi uvicorn websockets soundfile numpy speechbrain==1.0.3
+```
+
+
+For 11 and 12
+```
+pip install torch torchaudio
+pip install numpy soundfile fastapi uvicorn websockets
+pip install phonemizer
+pip install unidic-lite
+pip install pykakasi
+python -m unidic download
+pip install git+https://github.com/myshell-ai/MeloTTS.git
+
+```

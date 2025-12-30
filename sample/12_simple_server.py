@@ -4,7 +4,13 @@ import torch
 import librosa
 
 # 1. Setup Device
-device = "gpu" if torch.backends.mps.is_available() else "cpu"
+# ------------------ Device ------------------
+if torch.cuda.is_available():
+    device = "cuda"
+elif torch.backends.mps.is_available():
+    device = "mps"
+else:
+    device = "cpu"
 
 # 2. Initialize TTS for Indian English
 # Use 'EN_V2' or just 'EN' depending on your installation
