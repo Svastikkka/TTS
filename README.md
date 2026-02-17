@@ -1,6 +1,24 @@
 # TTS
 Text to speech model
 
+
+
+### Structure
+
+```
+├── data
+│   └── ReadME.md
+├── README.md
+├── requirements.txt
+├── src
+│   └── train
+│       ├── data_loader.py
+│       ├── model.py
+│       ├── train.py
+└── utils
+    └── verifyCuda.py
+```
+
 ### Diagram
 ```
 LLM → [Language Detection] → [Text Normalization] → [Phoneme Generation] → [Acoustic Model] → [Vocoder] → Audio
