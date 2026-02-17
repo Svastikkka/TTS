@@ -1,12 +1,12 @@
-# save as train.py
+# train.py
 import torch
 import torch.nn as nn
 from torch.amp import autocast, GradScaler
 from torch.utils.data import DataLoader
 
 # Import your previous classes
-from sample import MeloLikeTTS
-from train.data_loader import LJSpeechDataset, collate_fn
+from src.train.sample import MeloLikeTTS
+from src.train.data_loader import LJSpeechDataset, collate_fn
 
 # 1. Hyperparameters Optimized for A100
 BATCH_SIZE = 32  # You can go up to 128 on an 80GB A100
@@ -17,8 +17,14 @@ DEVICE = "cuda"
 def train():
     # 2. Initialize Dataset and Loader
     dataset = LJSpeechDataset("data/LJSpeech-1.1")
-    loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True, 
-                        collate_fn=collate_fn, num_workers=4, pin_memory=True)
+    loader = DataLoader(
+        dataset,
+        batch_size=BATCH_SIZE,
+        shuffle=True,
+        collate_fn=collate_fn,
+        num_workers=0,   # 🔥 CHANGE THIS
+        pin_memory=True
+    )
 
     # 3. Initialize Model, Optimizer, and Scaler
     # vocab_size 50 covers our basic alphabet + phonemes
@@ -46,7 +52,11 @@ def train():
                 output = model(texts, speaker_ids)
                 
                 # Trim or pad output to match ground truth mel length
-                output = output[:, :, :mels.size(2)]
+                if output.size(2) > mels.size(2):
+                    output = output[:, :, :mels.size(2)]
+                elif output.size(2) < mels.size(2):
+                    pad_amount = mels.size(2) - output.size(2)
+                    output = torch.nn.functional.pad(output, (0, pad_amount))
                 loss = criterion(output, mels)
 
             # Backward Pass
@@ -60,7 +70,7 @@ def train():
                 print(f"Epoch {epoch} | Step {i} | Loss: {loss.item():.4f}")
 
         # Save Checkpoint
-        torch.save(model.state_state_dict(), f"melo_model_epoch_{epoch}.pth")
+        torch.save(model.state_dict(), f"melo_model_epoch_{epoch}.pth")
         print(f"--- Epoch {epoch} Average Loss: {total_loss/len(loader):.4f} ---")
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-# Save this as data_loader.py
+# data_loader.py
 import os
 import torch
 import librosa
@@ -23,10 +23,8 @@ class LJSpeechDataset(Dataset):
         return len(self.metadata)
 
     def preprocess_text(self, text):
-        # Convert text to phonemes
-        phonemes = phonemize(text, language='en-us', backend='espeak', strip=True)
-        # Convert phonemes to integer IDs
-        token_ids = [CHAR_TO_ID.get(p, 0) for p in phonemes.lower()]
+        text = text.lower()
+        token_ids = [CHAR_TO_ID.get(c, 0) for c in text]
         return torch.LongTensor(token_ids)
 
     def get_mel(self, filename):
