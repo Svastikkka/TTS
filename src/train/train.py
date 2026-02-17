@@ -5,7 +5,7 @@ from torch.amp import autocast, GradScaler
 from torch.utils.data import DataLoader
 
 # Import your previous classes
-from src.train.sample import MeloLikeTTS
+from src.train.model import MeloLikeTTS
 from src.train.data_loader import LJSpeechDataset, collate_fn
 
 # 1. Hyperparameters Optimized for A100
