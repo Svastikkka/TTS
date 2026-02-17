@@ -8,11 +8,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     build-essential \
     libsndfile1 \
+    espeak-ng \
+    bzip2 \
     && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
 WORKDIR /app
-COPY requirements.txt .
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
-COPY ./src ./src
-COPY ./config ./config
-EXPOSE 8000
-CMD ["python", "src/main.py"]
+
+# Copy project
+COPY . .
+
+# Install Python dependencies
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+RUN chmod +x entrypoint.sh
+ENTRYPOINT ["/app/entrypoint.sh"]
