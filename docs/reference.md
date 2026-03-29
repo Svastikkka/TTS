@@ -1,0 +1,3 @@
+- [TurboQuant](https://research.google/blog/turboquant-redefining-ai-efficiency-with-extreme-compression/)
+- [LuxTTS](https://github.com/ysharma3501/LuxTTS)
+- [Gemini Embedding 2](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-embedding-2/)
